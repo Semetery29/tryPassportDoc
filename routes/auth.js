@@ -9,7 +9,7 @@ var router = express.Router();
 
 passport.serializeUser(function (user, cb) {
   process.nextTick(function () {
-    cb(null, { id: user.id, username: user.username });
+    cb(null, { id: user.id, username: user.username, name: user.name });
   });
 });
 
@@ -122,6 +122,13 @@ router.get("/login", function (req, res, next) {
   res.render("login");
 });
 router.get("/login/federated/google", passport.authenticate("google"));
+router.get(
+  "/oauth2/redirect/google",
+  passport.authenticate("google", {
+    successRedirect: "/",
+    failureRedirect: "/login",
+  })
+);
 
 router.post(
   "/login/password",
